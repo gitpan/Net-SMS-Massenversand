@@ -6,7 +6,6 @@ use URI;
 use URI::QueryParam;
 use LWP::UserAgent;
 
-use Unicode::String qw(latin1 utf8);
 
 __PACKAGE__->mk_accessors(qw(user test password msg_count error id));
 
@@ -16,11 +15,11 @@ Net::SMS::Massenversand - Send SMS via Massenversand.de
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 =head1 SYNOPSIS
 
@@ -36,6 +35,7 @@ our $VERSION = '0.02';
 		recipient => '00123456789'
 	  );
 	my $limit = $sms->limit;
+
 
 =head1 METHODS
 
@@ -64,7 +64,7 @@ sub new {
 
 This method returns the credit which is left at your account.
 
-Returns 1 on success or 0 and sets L</error> in case of an error.
+Sets L</error> in case of an error.
 
 =cut 
 
@@ -83,7 +83,7 @@ sub limit {
 =head2 send
 
 Sends the actual message. It is called with a hash which includes the necessary
-information. Avaiable parameters are:
+information. This method expects a latin1 encoded string as message. Available parameters are:
 
 =over
 
@@ -145,7 +145,7 @@ sub send {
 	my %param    = @_;
 	$self->_clear_object;
 	
-	$param{message} = latin1(utf8($param{message}));
+	$param{message} = $param{message};
 	
 	my $response = $self->_get_response(
 		receiver  => $param{receiver},
