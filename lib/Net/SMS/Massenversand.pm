@@ -5,6 +5,9 @@ use base "Class::Accessor::Fast";
 use URI;
 use URI::QueryParam;
 use LWP::UserAgent;
+
+use Unicode::String qw(latin1 utf8);
+
 __PACKAGE__->mk_accessors(qw(user test password msg_count error id));
 
 =head1 NAME
@@ -13,11 +16,11 @@ Net::SMS::Massenversand - Send SMS via Massenversand.de
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 =head1 SYNOPSIS
 
@@ -136,10 +139,14 @@ Returns 1 on success or 0 and sets L</error> in case of an error.
 
 =cut
 
+
 sub send {
 	my $self     = shift(@_);
 	my %param    = @_;
 	$self->_clear_object;
+	
+	$param{message} = latin1(utf8($param{message}));
+	
 	my $response = $self->_get_response(
 		receiver  => $param{receiver},
 		sender    => $param{sender},

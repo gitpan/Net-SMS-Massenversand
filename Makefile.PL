@@ -15,6 +15,7 @@ WriteMakefile(
         'URI::QueryParam' => 0,
         'LWP::UserAgent' => 0,
         'Class::Accessor::Fast' => 0,
+        'Unicode::String' => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'Net-SMS-Massenversand-*' },
